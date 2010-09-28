@@ -18,49 +18,51 @@ LEVELS = {'debug': logging.DEBUG,
           'error': logging.ERROR,
           'critical': logging.CRITICAL}
 
-def get_finished_torrents(transmission_server)
+def get_finished_torrents(transmission_server):
     torrents = transmission_server.list()
     finished_torrents = []
-    for key in torrents.keys
+    for key in torrents.keys:
         torrent = tc.info(key)[key]
-        if torrent.percentDone >= 1.0
+        if torrent.percentDone >= 1.0:
             finished_torrents.append(torrent)
     finished_torrents
 
-def get_torrents_with_ratio_sup(transmission_server,ratio)
+def get_torrents_with_ratio_sup(transmission_server,ratio):
     torrents = transmission_server.list()
     ratio_torrents = []
-    for key in torrents.keys
+    for key in torrents.keys:
         torrent = tc.info(key)[key]
-        if torrent.percentDone >= 1.0 && torrent.uploadRatio >= ratio
+        if ((torrent.percentDone >= 1.0) and (torrent.uploadRatio >= ratio)):
             ratio_torrents.append(torrent)
     ratio_torrents
 
-def is_included_series(name,series)
+def is_included_series(name,series):
+  pass
     
 
-def link_file(torrent,serie_path)
+def link_file(torrent,serie_path):
+  pass
 
-def files_to_move(files,extensions)
+def files_to_move(files,extensions):
+  pass
 
-
-print "trying to find the configuration file (Transmission2Folder.yaml)"
-if os.path.exists('./Transmission2Folder.yaml')
+print 'trying to find the configuration file (Transmission2Folder.yaml)'
+if os.path.exists('./Transmission2Folder.yaml'):
     conf_file = open('./Transmission2Folder.yaml', 'r')
     config = yaml.load(conf_file)
     level = LEVELS.get(config['log_level'], logging.NOTSET)
     logging.basicConfig(config['Transmission2Folder.log'],level=level)    
     tc = transmissionrpc.Client(config['address'], config['port'])
     finished_torrents = get_finished_torrents(tc)
-    for torrent in finished_torrents
-        if is_included_series(torrent['name'],config['series'])
+    for torrent in finished_torrents:
+        if is_included_series(torrent['name'],config['series']):
             files = files_to_move(torrent['files'],config['extensions'])
             link_file(files,serie_path)
     torrents_to_stop = get_torrents_with_ratio_sup(tc,config['ratio'])
-    for torrent in torrents_to_stop
+    for torrent in torrents_to_stop:
         logging.info('Stopping torrent ' + repr(torrent['name']))
         tc.stop(torrent['id'])
         tc.remove(torrent['id'])
-else
+else:
     print "configuration file (Transmission2Folder.yaml) doesn't exist, aborting..."
     
