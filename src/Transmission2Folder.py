@@ -62,19 +62,21 @@ print 'trying to find the configuration file (Transmission2Folder.yaml)'
 if os.path.exists('./Transmission2Folder.yaml'):
   conf_file = open('./Transmission2Folder.yaml', 'r')
   config = yaml.load(conf_file)
+  #TODO we should give default value if the config is not complete
   level = LEVELS.get(config['log_level'], logging.NOTSET)
-  logging.basicConfig(config['Transmission2Folder.log'], level=level)    
+  logging.basicConfig(config['Transmission2Folder.log'], level=level)
   tc = transmissionrpc.Client(config['address'], config['port'])
   finished_torrents = get_finished_torrents(tc)
   for torrent in finished_torrents:
-    if is_included_series(torrent['name'], config['series']):
-      files = files_to_move(torrent['files'], config['extensions'])
+    if is_included_series(torrent.name, config.series):
+      files = files_to_move(torrent.files, config['extensions'])
+      #TODO Serie Path is inexistant, should derive it from the config
       link_files(files, serie_path)
   torrents_to_stop = get_torrents_with_ratio_sup(tc, config['ratio'])
   for torrent in torrents_to_stop:
-    logging.info('Stopping torrent ' + repr(torrent['name']))
-    tc.stop(torrent['id'])
-    if is_included_series(torrent['name'], config['series']): tc.remove(torrent['id']) 
+    logging.info('Stopping torrent ' + repr(torrent.name))
+    tc.stop(torrent.id)
+    if is_included_series(torrent.name, config['series']): tc.remove(torrent.id) 
 else:
   print "configuration file (Transmission2Folder.yaml) doesn't exist, aborting..."
     
