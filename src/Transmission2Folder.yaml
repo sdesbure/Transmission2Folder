@@ -1,0 +1,28 @@
+host: nas
+port: 9091
+ratio: 1.40
+user: root
+password: none
+destination_folder: /mnt/nas/videos/series
+source_folder: /mnt/nas/downloads
+log_file: transmission2folder.log
+log_level: debug
+series:
+  - Malcolm
+  - House
+  - Desperate Housewives
+  - Southland
+  - The Big Bang Theory
+  - How I Met Your Mother
+  - Greek
+  - Ugly Betty
+  - Sons Of Anarchy
+  - Fringe
+  - Modern Family
+  - The Middle
+extensions:
+  - avi
+  - mpg
+  - mkv
+  - srt
+
