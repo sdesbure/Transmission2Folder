@@ -58,14 +58,50 @@ def files_to_move(files, extensions):
   ``extensions`` array"""
   pass
 
+def verify_config(config):
+  """ Verify the config and return it\n
+  Verification of the log level, log file, transmission host, transmission port,
+  ratio, source folder and destination folder"""
+  if 'log_level' not in config: 
+    print 'log_level not set in the config file, putting level "info"'
+    config['log_level'] = 'info'
+    
+  if 'log_file' not in config: 
+    print 'log_file not set in the config file, putting "Transmission2Folder.log"'
+    config['log_file'] = 'Transmission2Folder.log'
+  
+  level = LEVELS.get(config['log_level'], logging.NOTSET)
+  logging.basicConfig(filename=config['log_file'], level=level)
+  logging.getLogger('transmissionrpc').setLevel(level)
+  logging.debug('configuration: ' + repr(config))
+  if 'host' not in config:
+    logging.info('host not set in the config, putting "localhost"')
+    config['host'] = 'localhost'
+    
+  if 'port' not in config:
+    logging.info('port not set in the config, putting 9091')
+    config['port'] = 9091
+    
+  if 'ratio' not in config:
+    logging.info('ratio not set in the config, putting 1.50')
+    config['ratio'] = 1.50
+  
+  if 'destination_folder' not in config:
+    logging.error('destination folder not set, exiting')
+    print 'destination folder not set, exiting'
+    exit -1
+  
+  
+  config
+  
+
 print 'trying to find the configuration file (Transmission2Folder.yaml)'
 if os.path.exists('./Transmission2Folder.yaml'):
   conf_file = open('./Transmission2Folder.yaml', 'r')
   config = yaml.load(conf_file)
-  #TODO we should give default value if the config is not complete
-  level = LEVELS.get(config['log_level'], logging.NOTSET)
-  logging.basicConfig(config['Transmission2Folder.log'], level=level)
-  tc = transmissionrpc.Client(config['address'], config['port'])
+  config = verify_config(config)
+  #TODO we should give default value if the config is not complete 
+  tc = transmissionrpc.Client('10.193.35.152', port=9091)
   finished_torrents = get_finished_torrents(tc)
   for torrent in finished_torrents:
     if is_included_series(torrent.name, config.series):

@@ -1,10 +1,9 @@
-host: nas
+host: 10.193.35.152
 port: 9091
 ratio: 1.40
 user: root
 password: none
 destination_folder: /mnt/nas/videos/series
-source_folder: /mnt/nas/downloads
 log_file: transmission2folder.log
 log_level: debug
 series:
