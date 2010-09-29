@@ -1,14 +1,17 @@
-host: 10.193.35.152
+host: 192.168.1.4
 port: 9091
 ratio: 1.40
-user: root
-password: none
+user: transmission
+password: test
 destination_folder: /mnt/nas/videos/series
 log_file: transmission2folder.log
 log_level: debug
+transmission_rpc_level: info
 series:
   - Malcolm
   - House
+  - Debian
+  - Black Eyed Peas
   - Desperate Housewives
   - Southland
   - The Big Bang Theory
@@ -24,4 +27,6 @@ extensions:
   - mpg
   - mkv
   - srt
+  - iso
+  - mp3
 
